@@ -7,21 +7,29 @@ export default class Persons {
 		return this.state;
 	}
 
-	indexOf(person) {
-		return this.state.findIndex(entry => entry.id === person.id);
-	}
-
-	has(person) {
-		return this.indexOf(person) > -1;
-	}
-
-	update(person) {
-		const state = this.state.map(entry => {
-			return entry.id === person.id
-				? person
-				: entry;
+	indexOf(person, bool) {
+		let index = this.state.findIndex(entry => {
+			return bool ? Math.abs(entry.id) - 1 === person.id : Math.abs(entry.id) === person.id;
 		});
+		return index;
+	}
 
+	has(person, bool = false) {
+		return this.indexOf(person, bool) > -1;
+	}
+
+	update(person, bool) {
+		const state = this.state.map(entry => {
+			if (bool) {
+				return Math.abs(entry.id) - 1 === person.id
+					? person
+					: entry;
+			} else {
+				return Math.abs(entry.id) === person.id
+					? person
+					: entry;
+			}
+		});
 		return new Persons(state);
 	}
 
@@ -29,9 +37,9 @@ export default class Persons {
 		return new Persons([...this.state, person]);
 	}
 
-	upsert(person) {
-		return this.has(person)
-			? this.update(person)
+	upsert(person, bool = true) {
+		return this.has(person, bool)
+			? this.update(person, true)
 			: this.add(person);
 	}
 }

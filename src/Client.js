@@ -28,6 +28,7 @@ export default class Client extends Component {
 	}
 
 	onClickCreatePerson = () => {
+		// debugger;
 		this.createPerson();
 	};
 
@@ -42,7 +43,7 @@ export default class Client extends Component {
 			persons: state.persons.update({
 				...person,
 				name,
-			}),
+			}, false),
 		}));
 	}
 
@@ -53,10 +54,13 @@ export default class Client extends Component {
 			? 'post'
 			: 'patch';
 
+
+		// this.onSaveSuccess(person);
+
 		Server[method](person).then(this.onSaveSuccess);
 	}
 
-	onSaveSuccess = person => {
+	onSaveSuccess = (person) => {
 		this.setState(state => ({
 			persons: state.persons.upsert(person),
 		}));
@@ -66,7 +70,7 @@ export default class Client extends Component {
 		return this.state.persons
 			.get()
 			.map(person => (
-				<div key={person.id} className="challenge-person">
+				<div key={person.id} index={person.id} className="challenge-person">
 					<span className="challenge-person-id">
 						{person.id}
 					</span>

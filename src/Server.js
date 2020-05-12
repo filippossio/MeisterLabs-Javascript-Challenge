@@ -23,6 +23,8 @@ class Server {
 			}))
 			.then(person => {
 				state.persons = state.persons.add(person);
+				console.log('Server state', state.persons.state);
+
 				return person;
 			});
 	}
@@ -37,8 +39,10 @@ class Server {
 				if (!state.persons.has(person)) {
 					throw new Error(`Server.patch("${JSON.stringify(person)}") - Person does not exist`);
 				}
+				state.persons = state.persons.update(person, true);
+				console.log('Server state', state.persons.state);
+				console.log(person);
 
-				state.persons = state.persons.update(person);
 				return person;
 			});
 	}
